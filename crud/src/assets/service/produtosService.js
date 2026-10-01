@@ -28,3 +28,19 @@ export async function cadastrarProduto(produto) {
 
     return data;
 }
+
+
+export async function removerProduto(id) {
+
+    const { error } = await supabase
+        .from("produtos")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        console.error("Erro ao remover produto:", error);
+        return false;
+    }
+
+    return true;
+}
