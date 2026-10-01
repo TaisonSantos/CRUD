@@ -1,25 +1,35 @@
-import FormCadastroProd from "./assets/componentes/produtos/FormCadastroProd";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Layout from "./assets/layout/Loyalt";
+import Dashboard from "./assets/layout/Dashboard";
+
 import ListaProdutos from "./assets/componentes/produtos/ListaProdutos";
-
-
+import FormCadastroProd from "./assets/componentes/produtos/FormCadastroProd";
 
 function App() {
     return (
-        <main className="min-h-screen bg-gray-100 px-4 py-6 sm:px-6 lg:px-8">
+        <Routes>
 
-            <div className="mx-auto max-w-6xl">
+            <Route path="/" element={<Layout />}>
 
-                <h1 className="mb-6 text-2xl font-bold text-gray-800 sm:text-3xl">
-                    Sistema de Produtos
-                </h1>
+                <Route
+                    path="/dashboard"
+                    element={<Dashboard />}
+                />
 
-                <FormCadastroProd />
+                <Route
+                    path="/produtos"
+                    element={<ListaProdutos />}
+                />
 
-                <ListaProdutos />
+                <Route
+                    path="/cadastro"
+                    element={<FormCadastroProd />}
+                />
 
-            </div>
+            </Route>
 
-        </main>
+        </Routes>
     );
 }
 
