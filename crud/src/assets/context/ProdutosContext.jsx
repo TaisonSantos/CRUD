@@ -7,14 +7,18 @@ import {
 import {
     buscarProdutos,
     cadastrarProduto as cadastrarProdutoService,
-    removerProduto as removerProdutoService
+    removerProduto as removerProdutoService,
+    atualizarProduto as atualizarProdutoService
 } from "../service/produtosService";
 
+
 export const ProdutoContext = createContext();
+
 
 export function ProdutosProvider({ children }) {
 
     const [produtos, setProdutos] = useState([]);
+
 
     async function carregarProdutos() {
 
@@ -22,6 +26,7 @@ export function ProdutosProvider({ children }) {
 
         setProdutos(produtosBanco);
     }
+
 
     async function cadastrarProduto(produto) {
 
@@ -33,18 +38,37 @@ export function ProdutosProvider({ children }) {
         }
     }
 
+
     async function removerProduto(id) {
 
-        const sucesso = await removerProdutoService(id);
-    
+        const sucesso =
+            await removerProdutoService(id);
+
         if (sucesso) {
             await carregarProdutos();
         }
     }
 
+
+    async function atualizarProduto(id, produto) {
+
+        const produtoAtualizado =
+            await atualizarProdutoService(id, produto);
+    
+        if (!produtoAtualizado) {
+            return false;
+        }
+    
+        await carregarProdutos();
+    
+        return true;
+    }
+
+
     useEffect(() => {
         carregarProdutos();
     }, []);
+
 
     return (
         <ProdutoContext.Provider
@@ -52,7 +76,8 @@ export function ProdutosProvider({ children }) {
                 produtos,
                 carregarProdutos,
                 cadastrarProduto,
-                removerProduto
+                removerProduto,
+                atualizarProduto
             }}
         >
             {children}

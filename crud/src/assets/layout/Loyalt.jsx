@@ -4,7 +4,7 @@ import Nav from "./Nav";
 
 function Layout() {
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-gray-100">
 
             <Header />
 
@@ -12,7 +12,7 @@ function Layout() {
 
                 <Nav />
 
-                <main className="flex-1 p-6">
+                <main className="flex-1 overflow-auto p-6">
                     <Outlet />
                 </main>
 
