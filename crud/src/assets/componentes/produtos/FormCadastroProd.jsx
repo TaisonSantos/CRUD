@@ -1,10 +1,15 @@
 import { useContext } from "react";
+
 import { ProdutoContext } from "../../context/ProdutosContext";
-import ListaProdutosEmLista from "../../componentes/produtos/ListaProdutosEmLista";
+
+import ListaProdutosEmLista from "./ListaProdutosEmLista";
+
 
 function FormCadastroProd() {
 
-    const { cadastrarProduto } = useContext(ProdutoContext);
+    const { cadastrarProduto } =
+        useContext(ProdutoContext);
+
 
     async function enviarDados(event) {
 
@@ -12,55 +17,102 @@ function FormCadastroProd() {
 
         const form = event.target;
 
+
         const produto = {
+
             nome: form.nome.value.trim(),
-            quantidade: Number(form.quantidade.value),
-            preco: Number(form.preco.value),
-            categoria: form.categoria.value.trim()
+
+            quantidade:
+                Number(form.quantidade.value),
+
+            preco:
+                Number(form.preco.value),
+
+            categoria:
+                form.categoria.value.trim()
+
         };
 
+
+        // ==============================
+        // VALIDAÇÕES
+        // ==============================
+
         if (!produto.nome) {
+
             alert("Digite o nome do produto");
+
             return;
+
         }
+
 
         if (produto.quantidade <= 0) {
-            alert("A quantidade deve ser maior que zero");
+
+            alert(
+                "A quantidade deve ser maior que zero"
+            );
+
             return;
+
         }
+
 
         if (produto.preco <= 0) {
-            alert("O preço deve ser maior que zero");
+
+            alert(
+                "O preço deve ser maior que zero"
+            );
+
             return;
+
         }
 
+
         if (!produto.categoria) {
-            alert("Digite a categoria");
+
+            alert(
+                "Digite a categoria"
+            );
+
             return;
+
         }
+
+
+        // ==============================
+        // CADASTRAR
+        // ==============================
 
         await cadastrarProduto(produto);
 
+
         form.reset();
+
     }
 
 
     return (
-        <div className="w-full">
 
-            {/* FORMULÁRIO */}
+        <div className="w-full pb-12">
 
-            <section className="w-full rounded-xl border border-gray-200 bg-white shadow-sm">
+
+            {/* =================================
+                FORMULÁRIO
+            ================================= */}
+
+            <section className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+
 
                 {/* CABEÇALHO */}
 
-                <div className="border-b border-gray-200 px-6 py-5">
+                <div className="border-b border-gray-100 px-8 py-6">
 
-                    <h2 className="text-2xl font-bold text-gray-800">
+                    <h1 className="text-2xl font-bold text-gray-800">
                         Cadastrar Produto
-                    </h2>
+                    </h1>
 
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="mt-2 text-sm text-gray-500">
                         Adicione um novo produto ao estoque
                     </p>
 
@@ -71,14 +123,16 @@ function FormCadastroProd() {
 
                 <form
                     onSubmit={enviarDados}
-                    className="p-6"
+                    className="px-8 py-8"
                 >
 
-                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
+
 
                         {/* NOME */}
 
-                        <div className="w-full">
+                        <div>
 
                             <label
                                 htmlFor="nome"
@@ -92,7 +146,7 @@ function FormCadastroProd() {
                                 name="nome"
                                 id="nome"
                                 placeholder="Ex: Camisa"
-                                className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                                className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                             />
 
                         </div>
@@ -100,7 +154,7 @@ function FormCadastroProd() {
 
                         {/* QUANTIDADE */}
 
-                        <div className="w-full">
+                        <div>
 
                             <label
                                 htmlFor="quantidade"
@@ -115,7 +169,7 @@ function FormCadastroProd() {
                                 id="quantidade"
                                 min="1"
                                 placeholder="Ex: 10"
-                                className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                                className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                             />
 
                         </div>
@@ -123,7 +177,7 @@ function FormCadastroProd() {
 
                         {/* PREÇO */}
 
-                        <div className="w-full">
+                        <div>
 
                             <label
                                 htmlFor="preco"
@@ -139,7 +193,7 @@ function FormCadastroProd() {
                                 name="preco"
                                 id="preco"
                                 placeholder="Ex: 29.90"
-                                className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                                className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                             />
 
                         </div>
@@ -147,7 +201,7 @@ function FormCadastroProd() {
 
                         {/* CATEGORIA */}
 
-                        <div className="w-full">
+                        <div>
 
                             <label
                                 htmlFor="categoria"
@@ -161,7 +215,7 @@ function FormCadastroProd() {
                                 name="categoria"
                                 id="categoria"
                                 placeholder="Ex: Eletrônicos"
-                                className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                                className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                             />
 
                         </div>
@@ -171,13 +225,13 @@ function FormCadastroProd() {
 
                     {/* BOTÃO */}
 
-                    <div className="mt-6 flex justify-end">
+                    <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
 
                         <button
                             type="submit"
-                            className="rounded-lg bg-cyan-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-cyan-600 active:scale-[0.98]"
+                            className="rounded-xl bg-cyan-500 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-600 hover:shadow-md active:scale-[0.98]"
                         >
-                            Cadastrar Produto
+                            Cadastrar produto
                         </button>
 
                     </div>
@@ -187,12 +241,20 @@ function FormCadastroProd() {
             </section>
 
 
-            {/* TABELA */}
+            {/* =================================
+                LISTA
+            ================================= */}
 
-            <ListaProdutosEmLista />
+            <div className="mt-10">
+
+                <ListaProdutosEmLista />
+
+            </div>
 
         </div>
+
     );
 }
+
 
 export default FormCadastroProd;

@@ -4,11 +4,12 @@ import {
     useState
 } from "react";
 
+import { supabase } from "../service/supabase";
+
 import {
     buscarProdutos,
     cadastrarProduto as cadastrarProdutoService,
-    removerProduto as removerProdutoService,
-    atualizarProduto as atualizarProdutoService
+    removerProduto as removerProdutoService
 } from "../service/produtosService";
 
 
@@ -20,6 +21,10 @@ export function ProdutosProvider({ children }) {
     const [produtos, setProdutos] = useState([]);
 
 
+    // ==========================================
+    // CARREGAR PRODUTOS
+    // ==========================================
+
     async function carregarProdutos() {
 
         const produtosBanco = await buscarProdutos();
@@ -27,6 +32,10 @@ export function ProdutosProvider({ children }) {
         setProdutos(produtosBanco);
     }
 
+
+    // ==========================================
+    // CADASTRAR
+    // ==========================================
 
     async function cadastrarProduto(produto) {
 
@@ -39,6 +48,10 @@ export function ProdutosProvider({ children }) {
     }
 
 
+    // ==========================================
+    // REMOVER
+    // ==========================================
+
     async function removerProduto(id) {
 
         const sucesso =
@@ -50,23 +63,48 @@ export function ProdutosProvider({ children }) {
     }
 
 
-    async function atualizarProduto(id, produto) {
-
-        const produtoAtualizado =
-            await atualizarProdutoService(id, produto);
-    
-        if (!produtoAtualizado) {
-            return false;
-        }
-    
-        await carregarProdutos();
-    
-        return true;
-    }
-
+    // ==========================================
+    // OBSERVAR LOGIN / LOGOUT
+    // ==========================================
 
     useEffect(() => {
+
+        // Carrega inicialmente
         carregarProdutos();
+
+
+        // Fica observando mudanças de autenticação
+        const {
+            data: { subscription }
+        } = supabase.auth.onAuthStateChange(
+            async (event, session) => {
+
+                console.log("AUTH:", event);
+
+                if (session?.user) {
+
+                    console.log(
+                        "NOVO USUÁRIO:",
+                        session.user.id
+                    );
+
+                    await carregarProdutos();
+
+                } else {
+
+                    // Usuário saiu
+                    setProdutos([]);
+
+                }
+            }
+        );
+
+
+        // Limpa o listener
+        return () => {
+            subscription.unsubscribe();
+        };
+
     }, []);
 
 
@@ -76,8 +114,7 @@ export function ProdutosProvider({ children }) {
                 produtos,
                 carregarProdutos,
                 cadastrarProduto,
-                removerProduto,
-                atualizarProduto
+                removerProduto
             }}
         >
             {children}

@@ -11,26 +11,24 @@ function Nav() {
         {
             to: "/produtos",
             icon: "inventory_2",
-            nome: "Produtos"
+            nome: "Produtos Edição"
         },
         {
-            to: "/cadastro",
+            to: "/cadastro-produto",
             icon: "add_box",
-            nome: "Cadastrar"
+            nome: "Cadastrar Produto"
         }
     ];
 
-
     return (
 
-        <aside className="w-56 shrink-0 border-r border-gray-700 bg-gray-900">
+        <aside className="relative w-56 shrink-0 border-r border-gray-700 bg-gray-900">
 
             <div className="p-4">
 
                 <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Menu
                 </p>
-
 
                 <nav className="space-y-2">
 
@@ -65,10 +63,9 @@ function Nav() {
 
             </div>
 
-
             {/* PARTE INFERIOR */}
 
-            <div className="absolute bottom-0 w-56 border-t border-gray-800 p-4">
+            <div className="absolute bottom-0 w-full border-t border-gray-800 p-4">
 
                 <div className="rounded-lg bg-gray-800 p-3">
 

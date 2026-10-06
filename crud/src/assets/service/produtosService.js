@@ -1,11 +1,33 @@
 import { supabase } from "./supabase";
 
 
+// ==========================================
+// BUSCAR PRODUTOS DO USUÁRIO LOGADO
+// ==========================================
+
 export async function buscarProdutos() {
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+        console.error("Erro ao buscar usuário:", userError);
+        return [];
+    }
+
+    if (!user) {
+        console.log("Nenhum usuário logado.");
+        return [];
+    }
+
+    console.log("USUÁRIO BUSCANDO PRODUTOS:", user.id);
 
     const { data, error } = await supabase
         .from("produtos")
-        .select("*");
+        .select("*")
+        .eq("user_id", user.id);
 
     if (error) {
         console.error("Erro ao buscar produtos:", error);
@@ -16,11 +38,34 @@ export async function buscarProdutos() {
 }
 
 
+// ==========================================
+// CADASTRAR PRODUTO
+// ==========================================
+
 export async function cadastrarProduto(produto) {
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+        console.error("Erro ao buscar usuário:", userError);
+        return null;
+    }
+
+    if (!user) {
+        throw new Error("Usuário não autenticado");
+    }
+
+    console.log("USUÁRIO CADASTRANDO:", user.id);
 
     const { data, error } = await supabase
         .from("produtos")
-        .insert(produto)
+        .insert({
+            ...produto,
+            user_id: user.id
+        })
         .select();
 
     if (error) {
@@ -32,12 +77,25 @@ export async function cadastrarProduto(produto) {
 }
 
 
+// ==========================================
+// REMOVER PRODUTO
+// ==========================================
+
 export async function removerProduto(id) {
+
+    const {
+        data: { user }
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        return false;
+    }
 
     const { error } = await supabase
         .from("produtos")
         .delete()
-        .eq("id", id);
+        .eq("id", id)
+        .eq("user_id", user.id);
 
     if (error) {
         console.error("Erro ao remover produto:", error);
@@ -48,7 +106,23 @@ export async function removerProduto(id) {
 }
 
 
+// ==========================================
+// ATUALIZAR PRODUTO
+// ==========================================
+
 export async function atualizarProduto(id, produto) {
+
+    const {
+        data: { user }
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        return false;
+    }
+
+    console.log("ID RECEBIDO:", id);
+    console.log("USUÁRIO ATUAL:", user.id);
+    console.log("PRODUTO RECEBIDO:", produto);
 
     const { data, error } = await supabase
         .from("produtos")
@@ -59,14 +133,12 @@ export async function atualizarProduto(id, produto) {
             categoria: produto.categoria
         })
         .eq("id", id)
-        .select();
+        .eq("user_id", user.id);
 
     if (error) {
         console.error("ERRO AO ATUALIZAR:", error);
-        return null;
+        return false;
     }
 
-    console.log("PRODUTO ATUALIZADO:", data);
-
-    return data;
+    return true;
 }
