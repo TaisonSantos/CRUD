@@ -3,16 +3,15 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import Layout from "./assets/layout/Loyalt";
-
 import Dashboard from "./assets/layout/Dashboard";
 
 import ListaProdutos from "./assets/componentes/produtos/ListaProdutosCard";
-
 import FormCadastroProd from "./assets/componentes/produtos/FormCadastroProd";
 
 import Login from "./assets/componentes/produtos/Login/Login";
-
 import Cadastro from "./assets/componentes/produtos/Login/Cadastro";
+
+import ProtectedRoute from "./assets/componentes/ProtectedRoute";
 
 
 function App() {
@@ -21,10 +20,9 @@ function App() {
 
         <Routes>
 
-
-            {/* ==============================
-                AUTENTICAÇÃO
-            ============================== */}
+            {/* =====================================
+                ROTAS PÚBLICAS
+            ===================================== */}
 
             <Route
                 path="/login"
@@ -37,29 +35,33 @@ function App() {
             />
 
 
-            {/* ==============================
-                SISTEMA
-            ============================== */}
+            {/* =====================================
+                ROTAS PROTEGIDAS
+            ===================================== */}
 
-            <Route
-                path="/"
-                element={<Layout />}
-            >
+            <Route element={<ProtectedRoute />}>
 
                 <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                />
+                    path="/"
+                    element={<Layout />}
+                >
 
-                <Route
-                    path="/produtos"
-                    element={<ListaProdutos />}
-                />
+                    <Route
+                        path="/dashboard"
+                        element={<Dashboard />}
+                    />
 
-                <Route
-                    path="/cadastro-produto"
-                    element={<FormCadastroProd />}
-                />
+                    <Route
+                        path="/produtos"
+                        element={<ListaProdutos />}
+                    />
+
+                    <Route
+                        path="/cadastro-produto"
+                        element={<FormCadastroProd />}
+                    />
+
+                </Route>
 
             </Route>
 
