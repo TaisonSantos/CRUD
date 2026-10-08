@@ -57,6 +57,27 @@ function Dashboard() {
 
 
     // ==========================================
+    // PRODUTOS CADASTRADOS
+    // ==========================================
+
+    const produtosCadastrados = produtos.length;
+
+
+    // ==========================================
+    // PRODUTOS COM ESTOQUE BAIXO
+    // ==========================================
+
+    const produtosEstoqueBaixo = produtos.filter(
+        (produto) =>
+            Number(produto.quantidade) <= 5
+    );
+
+
+    const quantidadeEstoqueBaixo =
+        produtosEstoqueBaixo.length;
+
+
+    // ==========================================
     // DADOS DO GRÁFICO
     // ==========================================
 
@@ -79,13 +100,12 @@ function Dashboard() {
                 name: categoria,
                 quantidade: quantidade
             };
-
         }
     );
 
 
     // ==========================================
-    // CORES SUAVES DO GRÁFICO
+    // CORES DO GRÁFICO
     // ==========================================
 
     const cores = [
@@ -113,7 +133,6 @@ function Dashboard() {
                 currency: "BRL"
             }
         );
-
     }
 
 
@@ -143,7 +162,44 @@ function Dashboard() {
                 CARDS PRINCIPAIS
             ===================================== */}
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+
+                {/* =================================
+                    PRODUTOS CADASTRADOS
+                ================================= */}
+
+                <div className="rounded-2xl border border-gray-100 bg-white px-7 py-6 shadow-sm">
+
+                    <div className="flex items-center justify-center gap-5">
+
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-sky-50">
+
+                            <span className="text-xl font-bold text-sky-500">
+                                P
+                            </span>
+
+                        </div>
+
+                        <div>
+
+                            <p className="text-sm font-medium text-gray-500">
+                                Produtos
+                            </p>
+
+                            <h2 className="mt-1 text-3xl font-bold text-gray-800">
+                                {produtosCadastrados}
+                            </h2>
+
+                            <p className="mt-1 text-xs text-gray-400">
+                                Produtos cadastrados
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
 
                 {/* =================================
@@ -154,15 +210,13 @@ function Dashboard() {
 
                     <div className="flex items-center justify-center gap-5">
 
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50">
 
-                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-sky-50">
-
-                            <span className="text-xl font-bold text-sky-500">
-                                P
+                            <span className="text-xl font-bold text-blue-500">
+                                Q
                             </span>
 
                         </div>
-
 
                         <div>
 
@@ -193,7 +247,6 @@ function Dashboard() {
 
                     <div className="flex items-center justify-center gap-5">
 
-
                         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50">
 
                             <span className="text-sm font-bold text-emerald-500">
@@ -201,7 +254,6 @@ function Dashboard() {
                             </span>
 
                         </div>
-
 
                         <div>
 
@@ -225,35 +277,57 @@ function Dashboard() {
 
 
                 {/* =================================
-                    CATEGORIAS
+                    ESTOQUE BAIXO
                 ================================= */}
 
-                <div className="rounded-2xl border border-gray-100 bg-white px-7 py-6 shadow-sm">
+                <div
+                    className={`rounded-2xl border px-7 py-6 shadow-sm ${
+                        quantidadeEstoqueBaixo > 0
+                            ? "border-amber-100 bg-amber-50/40"
+                            : "border-gray-100 bg-white"
+                    }`}
+                >
 
                     <div className="flex items-center justify-center gap-5">
 
+                        <div
+                            className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${
+                                quantidadeEstoqueBaixo > 0
+                                    ? "bg-amber-100"
+                                    : "bg-gray-50"
+                            }`}
+                        >
 
-                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-violet-50">
-
-                            <span className="text-xl font-bold text-violet-500">
-                                C
+                            <span
+                                className={`material-symbols-outlined ${
+                                    quantidadeEstoqueBaixo > 0
+                                        ? "text-amber-500"
+                                        : "text-gray-400"
+                                }`}
+                            >
+                                warning
                             </span>
 
                         </div>
 
-
                         <div>
 
                             <p className="text-sm font-medium text-gray-500">
-                                Categorias
+                                Estoque baixo
                             </p>
 
-                            <h2 className="mt-1 text-3xl font-bold text-gray-800">
-                                {categorias.length}
+                            <h2
+                                className={`mt-1 text-3xl font-bold ${
+                                    quantidadeEstoqueBaixo > 0
+                                        ? "text-amber-600"
+                                        : "text-gray-800"
+                                }`}
+                            >
+                                {quantidadeEstoqueBaixo}
                             </h2>
 
                             <p className="mt-1 text-xs text-gray-400">
-                                Categorias cadastradas
+                                Produtos com até 5 unidades
                             </p>
 
                         </div>
@@ -277,7 +351,6 @@ function Dashboard() {
                 ================================= */}
 
                 <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm lg:col-span-3">
-
 
                     <div className="mb-5">
 
@@ -392,7 +465,6 @@ function Dashboard() {
 
                 <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm lg:col-span-2">
 
-
                     <div className="mb-6">
 
                         <h2 className="text-xl font-bold text-gray-800">
@@ -418,7 +490,7 @@ function Dashboard() {
                             </p>
 
                             <strong className="mt-1 block text-2xl font-bold text-gray-800">
-                                {produtos.length}
+                                {produtosCadastrados}
                             </strong>
 
                         </div>
@@ -454,6 +526,33 @@ function Dashboard() {
                         </div>
 
 
+                        {/* ESTOQUE BAIXO */}
+
+                        <div
+                            className={`rounded-xl border px-5 py-4 ${
+                                quantidadeEstoqueBaixo > 0
+                                    ? "border-amber-100 bg-amber-50"
+                                    : "border-gray-100 bg-gray-50/70"
+                            }`}
+                        >
+
+                            <p className="text-sm text-gray-500">
+                                Produtos com estoque baixo
+                            </p>
+
+                            <strong
+                                className={`mt-1 block text-2xl font-bold ${
+                                    quantidadeEstoqueBaixo > 0
+                                        ? "text-amber-600"
+                                        : "text-gray-800"
+                                }`}
+                            >
+                                {quantidadeEstoqueBaixo}
+                            </strong>
+
+                        </div>
+
+
                         {/* VALOR */}
 
                         <div className="rounded-xl border border-cyan-100 bg-cyan-50/60 px-5 py-4">
@@ -473,6 +572,89 @@ function Dashboard() {
                 </div>
 
             </div>
+
+
+            {/* =====================================
+                PRODUTOS COM ESTOQUE BAIXO
+            ===================================== */}
+
+            {quantidadeEstoqueBaixo > 0 && (
+
+                <div className="mt-8 rounded-2xl border border-amber-100 bg-white p-8 shadow-sm">
+
+                    <div className="mb-6">
+
+                        <div className="flex items-center gap-3">
+
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
+
+                                <span className="material-symbols-outlined text-amber-500">
+                                    warning
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <h2 className="text-xl font-bold text-gray-800">
+                                    Estoque baixo
+                                </h2>
+
+                                <p className="mt-1 text-sm text-gray-500">
+                                    Produtos que precisam de atenção
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                        {produtosEstoqueBaixo.map(
+                            (produto) => (
+
+                                <div
+                                    key={produto.id}
+                                    className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50/70 px-5 py-4"
+                                >
+
+                                    <div>
+
+                                        <p className="font-semibold text-gray-800">
+                                            {produto.nome}
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-gray-500">
+                                            {produto.categoria}
+                                        </p>
+
+                                    </div>
+
+                                    <div className="text-right">
+
+                                        <p className="text-lg font-bold text-amber-600">
+                                            {produto.quantidade}
+                                        </p>
+
+                                        <p className="text-xs text-gray-400">
+                                            unidades
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+            )}
 
 
             {/* =====================================
