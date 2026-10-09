@@ -8,6 +8,8 @@ import { AuthProvider } from "./assets/context/AuthContext";
 import { ProdutosProvider } from "./assets/context/ProdutosContext";
 
 
+
+
 createRoot(document.getElementById("root")).render(
 
     <StrictMode>

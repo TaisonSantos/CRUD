@@ -27,7 +27,8 @@ export function ProdutosProvider({ children }) {
 
     async function carregarProdutos() {
 
-        const produtosBanco = await buscarProdutos();
+        const produtosBanco =
+            await buscarProdutos();
 
         setProdutos(produtosBanco);
     }
@@ -42,9 +43,24 @@ export function ProdutosProvider({ children }) {
         const produtoCadastrado =
             await cadastrarProdutoService(produto);
 
-        if (produtoCadastrado) {
-            await carregarProdutos();
+
+        if (!produtoCadastrado) {
+
+            return {
+                sucesso: false
+            };
+
         }
+
+
+        await carregarProdutos();
+
+
+        return {
+            sucesso: true,
+            produto: produtoCadastrado
+        };
+
     }
 
 
@@ -57,9 +73,23 @@ export function ProdutosProvider({ children }) {
         const sucesso =
             await removerProdutoService(id);
 
-        if (sucesso) {
-            await carregarProdutos();
+
+        if (!sucesso) {
+
+            return {
+                sucesso: false
+            };
+
         }
+
+
+        await carregarProdutos();
+
+
+        return {
+            sucesso: true
+        };
+
     }
 
 
@@ -73,7 +103,7 @@ export function ProdutosProvider({ children }) {
         carregarProdutos();
 
 
-        // Fica observando mudanças de autenticação
+        // Observa mudanças de autenticação
         const {
             data: { subscription }
         } = supabase.auth.onAuthStateChange(
@@ -81,12 +111,14 @@ export function ProdutosProvider({ children }) {
 
                 console.log("AUTH:", event);
 
+
                 if (session?.user) {
 
                     console.log(
                         "NOVO USUÁRIO:",
                         session.user.id
                     );
+
 
                     await carregarProdutos();
 
@@ -96,19 +128,23 @@ export function ProdutosProvider({ children }) {
                     setProdutos([]);
 
                 }
+
             }
         );
 
 
-        // Limpa o listener
+        // Limpa listener
         return () => {
+
             subscription.unsubscribe();
+
         };
 
     }, []);
 
 
     return (
+
         <ProdutoContext.Provider
             value={{
                 produtos,
@@ -117,7 +153,11 @@ export function ProdutosProvider({ children }) {
                 removerProduto
             }}
         >
+
             {children}
+
         </ProdutoContext.Provider>
+
     );
+
 }

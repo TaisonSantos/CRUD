@@ -1,5 +1,7 @@
 import { useContext, useState } from "react";
 
+import { toast } from "react-toastify";
+
 import { ProdutoContext } from "../../context/ProdutosContext";
 
 
@@ -24,10 +26,15 @@ function Card({ produto }) {
 
 
     const [form, setForm] = useState({
+
         nome: nome,
+
         quantidade: quantidade,
+
         preco: preco,
+
         categoria: categoria
+
     });
 
 
@@ -37,11 +44,18 @@ function Card({ produto }) {
 
     function alterarCampo(event) {
 
-        const { name, value } = event.target;
+        const {
+            name,
+            value
+        } = event.target;
+
 
         setForm({
+
             ...form,
+
             [name]: value
+
         });
 
     }
@@ -55,49 +69,141 @@ function Card({ produto }) {
 
         event.preventDefault();
 
+
         const produtoAtualizado = {
+
             nome: form.nome.trim(),
-            quantidade: Number(form.quantidade),
-            preco: Number(form.preco),
-            categoria: form.categoria.trim()
+
+            quantidade:
+                Number(form.quantidade),
+
+            preco:
+                Number(form.preco),
+
+            categoria:
+                form.categoria.trim()
+
         };
 
 
+        // ==========================================
+        // VALIDAÇÕES
+        // ==========================================
+
         if (!produtoAtualizado.nome) {
-            alert("Digite o nome do produto");
+
+            alert(
+                "Digite o nome do produto"
+            );
+
             return;
+
         }
 
 
-        if (produtoAtualizado.quantidade <= 0) {
-            alert("A quantidade deve ser maior que zero");
+        if (
+            produtoAtualizado.quantidade <= 0
+        ) {
+
+            alert(
+                "A quantidade deve ser maior que zero"
+            );
+
             return;
+
         }
 
 
-        if (produtoAtualizado.preco <= 0) {
-            alert("O preço deve ser maior que zero");
+        if (
+            produtoAtualizado.preco <= 0
+        ) {
+
+            alert(
+                "O preço deve ser maior que zero"
+            );
+
             return;
+
         }
 
 
         if (!produtoAtualizado.categoria) {
-            alert("Digite a categoria");
+
+            alert(
+                "Digite a categoria"
+            );
+
             return;
+
         }
 
 
-        const sucesso = await atualizarProduto(
-            id,
-            produtoAtualizado
-        );
+        // ==========================================
+        // ATUALIZAR
+        // ==========================================
+
+        const sucesso =
+            await atualizarProduto(
+                id,
+                produtoAtualizado
+            );
 
 
         if (sucesso) {
+
             setEditando(false);
+
+            toast.success(
+                "Produto atualizado com sucesso!"
+            );
+
         } else {
-            alert("Erro ao atualizar o produto.");
+
+            toast.error(
+                "Erro ao atualizar o produto."
+            );
+
         }
+
+    }
+
+
+    // ==========================================
+    // CONFIRMAR REMOÇÃO
+    // ==========================================
+
+    async function confirmarRemocao() {
+
+        const confirmar = window.confirm(
+            `Tem certeza que deseja remover o produto "${nome}"?`
+        );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
+        const resultado =
+            await removerProduto(id);
+
+
+        if (!resultado?.sucesso) {
+
+            toast.error(
+                "Erro ao remover o produto."
+            );
+
+            return;
+
+        }
+
+
+        toast.success(
+            "Produto removido com sucesso!"
+        );
 
     }
 
@@ -109,11 +215,17 @@ function Card({ produto }) {
     function cancelarEdicao() {
 
         setForm({
+
             nome: nome,
+
             quantidade: quantidade,
+
             preco: preco,
+
             categoria: categoria
+
         });
+
 
         setEditando(false);
 
@@ -124,56 +236,81 @@ function Card({ produto }) {
 
         <article className="self-start rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100 transition duration-200 hover:-translate-y-1 hover:shadow-lg">
 
+
             {!editando ? (
 
                 <>
 
-                    {/* CABEÇALHO */}
+                    {/* =================================
+                        CABEÇALHO
+                    ================================= */}
 
                     <div className="mb-5 flex items-start justify-between gap-4">
 
                         <div className="min-w-0">
 
                             <h3 className="truncate text-xl font-bold text-gray-800">
+
                                 {nome}
+
                             </h3>
 
+
                             <p className="mt-1 text-xs text-gray-400">
+
                                 Produto #{id}
+
                             </p>
 
                         </div>
 
 
                         <span className="shrink-0 rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700">
+
                             {categoria}
+
                         </span>
 
                     </div>
 
 
-                    {/* INFORMAÇÕES */}
+                    {/* =================================
+                        INFORMAÇÕES
+                    ================================= */}
 
                     <div className="space-y-3">
+
+
+                        {/* QUANTIDADE */}
 
                         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
 
                             <span className="text-sm text-gray-500">
+
                                 Quantidade
+
                             </span>
 
+
                             <strong className="text-sm font-semibold text-gray-800">
+
                                 {quantidade}
+
                             </strong>
 
                         </div>
 
 
+                        {/* PREÇO */}
+
                         <div className="flex items-center justify-between">
 
                             <span className="text-sm text-gray-500">
+
                                 Preço
+
                             </span>
+
 
                             <strong className="text-base font-bold text-gray-800">
 
@@ -192,25 +329,38 @@ function Card({ produto }) {
                     </div>
 
 
-                    {/* BOTÕES */}
+                    {/* =================================
+                        BOTÕES
+                    ================================= */}
 
                     <div className="mt-5 grid grid-cols-2 gap-3">
 
+
+                        {/* EDITAR */}
+
                         <button
-                            onClick={() => setEditando(true)}
+                            onClick={() =>
+                                setEditando(true)
+                            }
                             type="button"
                             className="rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-600 active:scale-[0.98]"
                         >
+
                             Editar
+
                         </button>
 
 
+                        {/* REMOVER */}
+
                         <button
-                            onClick={() => removerProduto(id)}
+                            onClick={confirmarRemocao}
                             type="button"
                             className="rounded-lg bg-red-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600 active:scale-[0.98]"
                         >
+
                             Remover
+
                         </button>
 
                     </div>
@@ -219,18 +369,30 @@ function Card({ produto }) {
 
             ) : (
 
-                <form onSubmit={salvarAlteracao}>
+                /* =================================
+                   FORMULÁRIO DE EDIÇÃO
+                ================================= */
+
+                <form
+                    onSubmit={salvarAlteracao}
+                >
+
 
                     {/* TÍTULO */}
 
                     <div className="mb-5">
 
                         <h3 className="text-xl font-bold text-gray-800">
+
                             Editar produto
+
                         </h3>
 
+
                         <p className="mt-1 text-xs text-gray-400">
+
                             Atualize as informações do produto
+
                         </p>
 
                     </div>
@@ -241,8 +403,11 @@ function Card({ produto }) {
                     <div className="mb-4">
 
                         <label className="mb-2 block text-sm font-semibold text-gray-700">
+
                             Nome
+
                         </label>
+
 
                         <input
                             type="text"
@@ -260,8 +425,11 @@ function Card({ produto }) {
                     <div className="mb-4">
 
                         <label className="mb-2 block text-sm font-semibold text-gray-700">
+
                             Quantidade
+
                         </label>
+
 
                         <input
                             type="number"
@@ -280,8 +448,11 @@ function Card({ produto }) {
                     <div className="mb-4">
 
                         <label className="mb-2 block text-sm font-semibold text-gray-700">
+
                             Preço
+
                         </label>
+
 
                         <input
                             type="number"
@@ -301,8 +472,11 @@ function Card({ produto }) {
                     <div className="mb-5">
 
                         <label className="mb-2 block text-sm font-semibold text-gray-700">
+
                             Categoria
+
                         </label>
+
 
                         <input
                             type="text"
@@ -319,23 +493,33 @@ function Card({ produto }) {
 
                     <div className="grid grid-cols-2 gap-3">
 
+
+                        {/* SALVAR */}
+
                         <button
                             type="submit"
                             className="rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700 active:scale-[0.98]"
                         >
+
                             Salvar
+
                         </button>
 
+
+                        {/* CANCELAR */}
 
                         <button
                             type="button"
                             onClick={cancelarEdicao}
                             className="rounded-lg bg-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-300 active:scale-[0.98]"
                         >
+
                             Cancelar
+
                         </button>
 
                     </div>
+
 
                 </form>
 
@@ -344,6 +528,7 @@ function Card({ produto }) {
         </article>
 
     );
+
 }
 
 

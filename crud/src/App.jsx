@@ -1,71 +1,106 @@
-import { Route, Routes } from "react-router-dom";
+import {
+    Route,
+    Routes
+} from "react-router-dom";
+
+import {
+    ToastContainer
+} from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
 
-import Layout from "./assets/layout/Loyalt";
-import Dashboard from "./assets/layout/Dashboard";
 
-import ListaProdutos from "./assets/componentes/produtos/ListaProdutosCard";
-import FormCadastroProd from "./assets/componentes/produtos/FormCadastroProd";
+import Layout
+    from "./assets/layout/Loyalt";
 
-import Login from "./assets/componentes/produtos/Login/Login";
-import Cadastro from "./assets/componentes/produtos/Login/Cadastro";
+import Dashboard
+    from "./assets/layout/Dashboard";
 
-import ProtectedRoute from "./assets/componentes/ProtectedRoute";
+import ListaProdutos
+    from "./assets/componentes/produtos/ListaProdutosCard";
+
+import FormCadastroProd
+    from "./assets/componentes/produtos/FormCadastroProd";
+
+import Login
+    from "./assets/componentes/Login/Login";
+
+import Cadastro
+    from "./assets/componentes/Login/Cadastro";
+
+import ProtectedRoute
+    from "./assets/componentes/ProtectedRoute";
 
 
 function App() {
 
     return (
 
-        <Routes>
+        <>
 
-            {/* =====================================
-                ROTAS PÚBLICAS
-            ===================================== */}
+            <Routes>
 
-            <Route
-                path="/login"
-                element={<Login />}
-            />
-
-            <Route
-                path="/cadastro"
-                element={<Cadastro />}
-            />
-
-
-            {/* =====================================
-                ROTAS PROTEGIDAS
-            ===================================== */}
-
-            <Route element={<ProtectedRoute />}>
+                {/* ROTAS PÚBLICAS */}
 
                 <Route
-                    path="/"
-                    element={<Layout />}
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/cadastro"
+                    element={<Cadastro />}
+                />
+
+
+                {/* ROTAS PROTEGIDAS */}
+
+                <Route
+                    element={<ProtectedRoute />}
                 >
 
                     <Route
-                        path="/dashboard"
-                        element={<Dashboard />}
-                    />
+                        path="/"
+                        element={<Layout />}
+                    >
 
-                    <Route
-                        path="/produtos"
-                        element={<ListaProdutos />}
-                    />
+                        <Route
+                            path="dashboard"
+                            element={<Dashboard />}
+                        />
 
-                    <Route
-                        path="/cadastro-produto"
-                        element={<FormCadastroProd />}
-                    />
+                        <Route
+                            path="produtos"
+                            element={<ListaProdutos />}
+                        />
+
+                        <Route
+                            path="cadastro-produto"
+                            element={<FormCadastroProd />}
+                        />
+
+                    </Route>
 
                 </Route>
 
-            </Route>
+            </Routes>
 
-        </Routes>
+
+            {/* TOAST GLOBAL */}
+
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+                theme="dark"
+            />
+
+        </>
 
     );
 
