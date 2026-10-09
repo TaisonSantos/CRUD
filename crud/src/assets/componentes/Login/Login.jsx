@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 import {
@@ -29,65 +30,80 @@ function Login() {
 
         setErro("");
 
-
-        // ========================================
-        // VALIDAÇÕES
-        // ========================================
-
         if (!email.trim()) {
-
             setErro("Digite seu e-mail.");
-
             return;
-
         }
-
 
         if (!senha) {
-
             setErro("Digite sua senha.");
-
             return;
-
         }
-
-
-        // ========================================
-        // LOADING
-        // ========================================
 
         setCarregando(true);
 
+        try {
 
-        const resultado = await fazerLogin(
-            email.trim(),
-            senha
-        );
+            const resultado = await fazerLogin(
+                email.trim(),
+                senha
+            );
 
+            if (!resultado.sucesso) {
+                setErro("E-mail ou senha incorretos.");
+                return;
+            }
 
-        setCarregando(false);
+            navigate("/dashboard");
 
+        } catch (error) {
 
-        // ========================================
-        // ERRO
-        // ========================================
+            console.error("Erro ao fazer login:", error);
 
-        if (!resultado.sucesso) {
+            setErro("Ocorreu um erro ao tentar entrar.");
 
-            setErro("E-mail ou senha incorretos.");
+        } finally {
 
-            return;
+            setCarregando(false);
 
         }
-
-
-        // ========================================
-        // SUCESSO
-        // ========================================
-
-        navigate("/dashboard");
-
     }
+
+
+    // ==========================================
+    // ESTILOS DOS INPUTS
+    // ==========================================
+
+    const classeInput = `
+        h-11
+        w-full
+        rounded-xl
+        border
+        border-white/30
+        bg-white/90
+        pr-4
+        text-sm
+        text-gray-800
+        outline-none
+        transition
+        placeholder:text-gray-500
+        hover:border-white/60
+        focus:border-cyan-400
+        focus:bg-white
+        focus:ring-2
+        focus:ring-cyan-500/20
+    `;
+
+    const classeIcone = `
+        pointer-events-none
+        absolute
+        left-3.5
+        top-1/2
+        h-4
+        w-4
+        -translate-y-1/2
+        text-gray-500
+    `;
 
 
     return (
@@ -118,9 +134,7 @@ function Login() {
             />
 
 
-            {/* =====================================
-                OVERLAY
-            ===================================== */}
+            {/* OVERLAY */}
 
             <div
                 className="
@@ -167,9 +181,7 @@ function Login() {
                     "
                 >
 
-                    {/* =================================
-                        CABEÇALHO
-                    ================================= */}
+                    {/* CABEÇALHO */}
 
                     <div
                         className="
@@ -180,16 +192,14 @@ function Login() {
                         "
                     >
 
-                        {/* =================================
-                            LOGO
-                        ================================= */}
+                        {/* LOGO */}
 
                         <div
                             className="
                                 mx-auto
                                 flex
-                                h-13
-                                w-13
+                                h-12
+                                w-12
                                 items-center
                                 justify-center
                                 rounded-xl
@@ -198,86 +208,37 @@ function Login() {
                                 shadow-cyan-500/30
                             "
                         >
-
-                            <span
-                                className="
-                                    text-xl
-                                    font-bold
-                                    text-white
-                                "
-                            >
+                            <span className="text-xl font-bold text-white">
                                 P
                             </span>
-
                         </div>
 
 
-                        {/* =================================
-                            NOME DO SISTEMA
-                        ================================= */}
+                        {/* NOME DO SISTEMA */}
 
-                        <h1
-                            className="
-                                mt-3
-                                text-xl
-                                font-bold
-                                text-white
-                            "
-                        >
+                        <h1 className="mt-3 text-xl font-bold text-white">
                             ProductSystem
                         </h1>
 
-
-                        <p
-                            className="
-                                mt-1
-                                text-xs
-                                text-gray-300
-                            "
-                        >
+                        <p className="mt-1 text-xs text-gray-300">
                             Gerenciamento de produtos
                         </p>
 
 
-                        {/* =================================
-                            TÍTULO
-                        ================================= */}
+                        {/* TÍTULO */}
 
-                        <h2
-                            className="
-                                mt-5
-                                text-xl
-                                font-bold
-                                text-white
-                            "
-                        >
+                        <h2 className="mt-5 text-xl font-bold text-white">
                             Bem-vindo de volta
                         </h2>
 
-
-                        <p
-                            className="
-                                mt-1
-                                text-xs
-                                text-gray-300
-                            "
-                        >
+                        <p className="mt-1 text-xs text-gray-300">
                             Entre na sua conta para continuar.
                         </p>
 
                     </div>
 
 
-                    {/* =================================
-                        DIVISÓRIA
-                    ================================= */}
-
-                    <div
-                        className="
-                            border-t
-                            border-white/10
-                        "
-                    />
+                    <div className="border-t border-white/10" />
 
 
                     {/* =================================
@@ -286,19 +247,15 @@ function Login() {
 
                     <form
                         onSubmit={entrar}
-                        className="
-                            px-7
-                            py-6
-                        "
+                        className="px-7 py-6"
                     >
 
-                        {/* =================================
-                            MENSAGEM DE ERRO
-                        ================================= */}
+                        {/* ERRO */}
 
                         {erro && (
 
                             <div
+                                role="alert"
                                 className="
                                     mb-5
                                     rounded-xl
@@ -309,17 +266,9 @@ function Login() {
                                     py-3
                                 "
                             >
-
-                                <p
-                                    className="
-                                        text-xs
-                                        font-medium
-                                        text-red-200
-                                    "
-                                >
+                                <p className="text-xs font-medium text-red-200">
                                     {erro}
                                 </p>
-
                             </div>
 
                         )}
@@ -329,51 +278,25 @@ function Login() {
                             E-MAIL
                         ================================= */}
 
-                        <div
-                            className="
-                                mb-5
-                            "
-                        >
+                        <div className="mb-5">
 
                             <label
                                 htmlFor="email"
-                                className="
-                                    mb-2
-                                    block
-                                    text-xs
-                                    font-semibold
-                                    text-white
-                                "
+                                className="mb-2 block text-xs font-semibold text-white"
                             >
                                 E-mail
                             </label>
 
-
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
-
-                                {/* ÍCONE E-MAIL */}
+                            <div className="relative">
 
                                 <svg
-                                    className="
-                                        pointer-events-none
-                                        absolute
-                                        left-4
-                                        top-1/2
-                                        h-5
-                                        w-5
-                                        -translate-y-1/2
-                                        text-gray-300
-                                    "
+                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="1.8"
+                                    className={classeIcone}
                                 >
-
                                     <rect
                                         x="3"
                                         y="5"
@@ -382,12 +305,8 @@ function Login() {
                                         rx="2"
                                     />
 
-                                    <path
-                                        d="m3 7 9 6 9-6"
-                                    />
-
+                                    <path d="m3 7 9 6 9-6" />
                                 </svg>
-
 
                                 <input
                                     type="email"
@@ -398,26 +317,11 @@ function Login() {
                                     }
                                     placeholder="seu@email.com"
                                     autoComplete="email"
-                                    className="
-                                        h-11
-                                        w-full
-                                        rounded-xl
-                                        border
-                                        border-white/30
-                                        bg-white/10
-                                        pl-11
-                                        pr-4
-                                        text-sm
-                                        text-white
-                                        outline-none
-                                        transition
-                                        placeholder:text-gray-400
-                                        hover:border-white/50
-                                        focus:border-cyan-400
-                                        focus:bg-white/15
-                                        focus:ring-2
-                                        focus:ring-cyan-500/20
-                                    "
+                                    required
+                                    className={classeInput}
+                                    style={{
+                                        paddingLeft: "2.75rem"
+                                    }}
                                 />
 
                             </div>
@@ -429,51 +333,25 @@ function Login() {
                             SENHA
                         ================================= */}
 
-                        <div
-                            className="
-                                mb-4
-                            "
-                        >
+                        <div className="mb-4">
 
                             <label
                                 htmlFor="senha"
-                                className="
-                                    mb-2
-                                    block
-                                    text-xs
-                                    font-semibold
-                                    text-white
-                                "
+                                className="mb-2 block text-xs font-semibold text-white"
                             >
                                 Senha
                             </label>
 
-
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
-
-                                {/* ÍCONE CADEADO */}
+                            <div className="relative">
 
                                 <svg
-                                    className="
-                                        pointer-events-none
-                                        absolute
-                                        left-4
-                                        top-1/2
-                                        h-5
-                                        w-5
-                                        -translate-y-1/2
-                                        text-gray-300
-                                    "
+                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="1.8"
+                                    className={classeIcone}
                                 >
-
                                     <rect
                                         x="5"
                                         y="10"
@@ -482,12 +360,8 @@ function Login() {
                                         rx="2"
                                     />
 
-                                    <path
-                                        d="M8 10V7a4 4 0 0 1 8 0v3"
-                                    />
-
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
                                 </svg>
-
 
                                 <input
                                     type="password"
@@ -498,26 +372,11 @@ function Login() {
                                     }
                                     placeholder="Digite sua senha"
                                     autoComplete="current-password"
-                                    className="
-                                        h-11
-                                        w-full
-                                        rounded-xl
-                                        border
-                                        border-white/30
-                                        bg-white/10
-                                        pl-11
-                                        pr-4
-                                        text-sm
-                                        text-white
-                                        outline-none
-                                        transition
-                                        placeholder:text-gray-400
-                                        hover:border-white/50
-                                        focus:border-cyan-400
-                                        focus:bg-white/15
-                                        focus:ring-2
-                                        focus:ring-cyan-500/20
-                                    "
+                                    required
+                                    className={classeInput}
+                                    style={{
+                                        paddingLeft: "2.75rem"
+                                    }}
                                 />
 
                             </div>
@@ -526,7 +385,7 @@ function Login() {
 
 
                         {/* =================================
-                            LEMBRAR / ESQUECI
+                            LEMBRAR / ESQUECI SENHA
                         ================================= */}
 
                         <div
@@ -542,8 +401,6 @@ function Login() {
                             "
                         >
 
-                            {/* LEMBRAR */}
-
                             <label
                                 className="
                                     flex
@@ -555,7 +412,6 @@ function Login() {
                                     text-gray-200
                                 "
                             >
-
                                 <input
                                     type="checkbox"
                                     className="
@@ -563,7 +419,6 @@ function Login() {
                                         w-4
                                         cursor-pointer
                                         rounded
-                                        border-white/30
                                         accent-cyan-500
                                     "
                                 />
@@ -571,11 +426,8 @@ function Login() {
                                 <span>
                                     Lembrar de mim
                                 </span>
-
                             </label>
 
-
-                            {/* ESQUECI SENHA */}
 
                             <button
                                 type="button"
@@ -595,7 +447,7 @@ function Login() {
 
 
                         {/* =================================
-                            BOTÃO ENTRAR
+                            ENTRAR
                         ================================= */}
 
                         <button
@@ -620,12 +472,7 @@ function Login() {
                                 disabled:opacity-60
                             "
                         >
-
-                            {carregando
-                                ? "Entrando..."
-                                : "Entrar"
-                            }
-
+                            {carregando ? "Entrando..." : "Entrar"}
                         </button>
 
 
@@ -633,55 +480,19 @@ function Login() {
                             CADASTRO
                         ================================= */}
 
-                        <div
-                            className="
-                                mt-6
-                            "
-                        >
+                        <div className="mt-6">
 
-                            {/* DIVISÓRIA */}
+                            <div className="mb-4 flex items-center gap-3">
 
-                            <div
-                                className="
-                                    mb-4
-                                    flex
-                                    items-center
-                                    gap-3
-                                "
-                            >
+                                <div className="h-px flex-1 bg-white/15" />
 
-                                <div
-                                    className="
-                                        h-px
-                                        flex-1
-                                        bg-white/15
-                                    "
-                                />
-
-
-                                <span
-                                    className="
-                                        whitespace-nowrap
-                                        text-[11px]
-                                        text-gray-300
-                                    "
-                                >
+                                <span className="whitespace-nowrap text-[11px] text-gray-300">
                                     Ainda não possui uma conta?
                                 </span>
 
-
-                                <div
-                                    className="
-                                        h-px
-                                        flex-1
-                                        bg-white/15
-                                    "
-                                />
+                                <div className="h-px flex-1 bg-white/15" />
 
                             </div>
-
-
-                            {/* BOTÃO CADASTRO */}
 
                             <Link
                                 to="/cadastro"
@@ -718,6 +529,5 @@ function Login() {
 
     );
 }
-
 
 export default Login;

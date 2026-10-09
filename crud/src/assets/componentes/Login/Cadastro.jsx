@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 import {
@@ -33,97 +34,105 @@ function Cadastro() {
         setErro("");
         setSucesso("");
 
-
-        // ========================================
         // VALIDAÇÕES
-        // ========================================
 
         if (!nome.trim()) {
-
             setErro("Digite seu nome.");
-
             return;
-
         }
-
 
         if (!email.trim()) {
-
             setErro("Digite seu e-mail.");
-
             return;
-
         }
 
-
         if (senha.length < 6) {
-
             setErro(
                 "A senha deve possuir pelo menos 6 caracteres."
             );
-
             return;
-
         }
-
 
         if (senha !== confirmarSenha) {
-
             setErro("As senhas não são iguais.");
-
             return;
-
         }
 
-
-        // ========================================
-        // LOADING
-        // ========================================
+        // CADASTRO
 
         setCarregando(true);
 
+        try {
 
-        const resultado = await cadastrarUsuario(
-            email.trim(),
-            senha,
-            nome.trim()
-        );
-
-
-        setCarregando(false);
-
-
-        // ========================================
-        // ERRO
-        // ========================================
-
-        if (!resultado.sucesso) {
-
-            setErro(
-                "Não foi possível realizar o cadastro."
+            const resultado = await cadastrarUsuario(
+                email.trim(),
+                senha,
+                nome.trim()
             );
 
-            return;
+            if (!resultado.sucesso) {
+                setErro(
+                    "Não foi possível realizar o cadastro."
+                );
+                return;
+            }
+
+            setSucesso("Conta criada com sucesso!");
+
+            setTimeout(() => {
+                navigate("/login");
+            }, 1500);
+
+        } catch (error) {
+
+            console.error("Erro ao cadastrar:", error);
+
+            setErro(
+                "Ocorreu um erro ao criar sua conta."
+            );
+
+        } finally {
+
+            setCarregando(false);
 
         }
-
-
-        // ========================================
-        // SUCESSO
-        // ========================================
-
-        setSucesso(
-            "Conta criada com sucesso!"
-        );
-
-
-        setTimeout(() => {
-
-            navigate("/login");
-
-        }, 1500);
-
     }
+
+
+    // ==========================================
+    // CLASSES DOS CAMPOS
+    // ==========================================
+
+    const classeInput = `
+        h-11
+        w-full
+        rounded-xl
+        border
+        border-white/30
+        bg-white/10
+        pr-4
+        text-sm
+        text-white
+        outline-none
+        transition
+        placeholder:text-gray-300
+        hover:border-white/50
+        focus:border-cyan-400
+        focus:bg-white/15
+        focus:ring-2
+        focus:ring-cyan-500/20
+    `;
+
+    const classeIcone = `
+        pointer-events-none
+        absolute
+        left-3.5
+        top-1/2
+        h-4
+        w-4
+        -translate-y-1/2
+        text-gray-200
+    `;
 
 
     return (
@@ -154,9 +163,7 @@ function Cadastro() {
             />
 
 
-            {/* =====================================
-                OVERLAY
-            ===================================== */}
+            {/* OVERLAY */}
 
             <div
                 className="
@@ -203,9 +210,7 @@ function Cadastro() {
                     "
                 >
 
-                    {/* =================================
-                        CABEÇALHO
-                    ================================= */}
+                    {/* CABEÇALHO */}
 
                     <div
                         className="
@@ -222,8 +227,8 @@ function Cadastro() {
                             className="
                                 mx-auto
                                 flex
-                                h-13
-                                w-13
+                                h-12
+                                w-12
                                 items-center
                                 justify-center
                                 rounded-xl
@@ -232,7 +237,6 @@ function Cadastro() {
                                 shadow-cyan-500/30
                             "
                         >
-
                             <span
                                 className="
                                     text-xl
@@ -242,7 +246,6 @@ function Cadastro() {
                             >
                                 P
                             </span>
-
                         </div>
 
 
@@ -259,14 +262,7 @@ function Cadastro() {
                             ProductSystem
                         </h1>
 
-
-                        <p
-                            className="
-                                mt-1
-                                text-xs
-                                text-gray-300
-                            "
-                        >
+                        <p className="mt-1 text-xs text-gray-300">
                             Gerenciamento de produtos
                         </p>
 
@@ -284,30 +280,14 @@ function Cadastro() {
                             Criar sua conta
                         </h2>
 
-
-                        <p
-                            className="
-                                mt-1
-                                text-xs
-                                text-gray-300
-                            "
-                        >
+                        <p className="mt-1 text-xs text-gray-300">
                             Preencha os dados para começar.
                         </p>
 
                     </div>
 
 
-                    {/* =================================
-                        DIVISÓRIA
-                    ================================= */}
-
-                    <div
-                        className="
-                            border-t
-                            border-white/10
-                        "
-                    />
+                    <div className="border-t border-white/10" />
 
 
                     {/* =================================
@@ -316,19 +296,15 @@ function Cadastro() {
 
                     <form
                         onSubmit={cadastrar}
-                        className="
-                            px-7
-                            py-6
-                        "
+                        className="px-7 py-6"
                     >
 
-                        {/* =================================
-                            ERRO
-                        ================================= */}
+                        {/* ERRO */}
 
                         {erro && (
 
                             <div
+                                role="alert"
                                 className="
                                     mb-5
                                     rounded-xl
@@ -339,29 +315,20 @@ function Cadastro() {
                                     py-3
                                 "
                             >
-
-                                <p
-                                    className="
-                                        text-xs
-                                        font-medium
-                                        text-red-200
-                                    "
-                                >
+                                <p className="text-xs font-medium text-red-200">
                                     {erro}
                                 </p>
-
                             </div>
 
                         )}
 
 
-                        {/* =================================
-                            SUCESSO
-                        ================================= */}
+                        {/* SUCESSO */}
 
                         {sucesso && (
 
                             <div
+                                role="status"
                                 className="
                                     mb-5
                                     rounded-xl
@@ -372,17 +339,9 @@ function Cadastro() {
                                     py-3
                                 "
                             >
-
-                                <p
-                                    className="
-                                        text-xs
-                                        font-medium
-                                        text-green-200
-                                    "
-                                >
+                                <p className="text-xs font-medium text-green-200">
                                     {sucesso}
                                 </p>
-
                             </div>
 
                         )}
@@ -392,11 +351,7 @@ function Cadastro() {
                             NOME
                         ================================= */}
 
-                        <div
-                            className="
-                                mb-4
-                            "
-                        >
+                        <div className="mb-5">
 
                             <label
                                 htmlFor="nome"
@@ -411,44 +366,26 @@ function Cadastro() {
                                 Nome
                             </label>
 
-
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
-
-                                {/* ÍCONE */}
+                            <div className="relative">
 
                                 <svg
-                                    className="
-                                        pointer-events-none
-                                        absolute
-                                        left-4
-                                        top-1/2
-                                        h-5
-                                        w-5
-                                        -translate-y-1/2
-                                        text-gray-300
-                                    "
+                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="1.8"
+                                    className={classeIcone}
                                 >
-
                                     <circle
                                         cx="12"
                                         cy="8"
                                         r="3.5"
                                     />
-
                                     <path
                                         d="M5 20c.8-3.3 3.2-5 7-5s6.2 1.7 7 5"
+                                        strokeLinecap="round"
                                     />
-
                                 </svg>
-
 
                                 <input
                                     type="text"
@@ -459,26 +396,11 @@ function Cadastro() {
                                     }
                                     placeholder="Seu nome"
                                     autoComplete="name"
-                                    className="
-                                        h-11
-                                        w-full
-                                        rounded-xl
-                                        border
-                                        border-white/30
-                                        bg-white/10
-                                        pl-11
-                                        pr-4
-                                        text-sm
-                                        text-white
-                                        outline-none
-                                        transition
-                                        placeholder:text-gray-400
-                                        hover:border-white/50
-                                        focus:border-cyan-400
-                                        focus:bg-white/15
-                                        focus:ring-2
-                                        focus:ring-cyan-500/20
-                                    "
+                                    required
+                                    className={classeInput}
+                                    style={{
+                                        paddingLeft: "2.75rem"
+                                    }}
                                 />
 
                             </div>
@@ -490,11 +412,7 @@ function Cadastro() {
                             E-MAIL
                         ================================= */}
 
-                        <div
-                            className="
-                                mb-4
-                            "
-                        >
+                        <div className="mb-5">
 
                             <label
                                 htmlFor="email"
@@ -509,32 +427,16 @@ function Cadastro() {
                                 E-mail
                             </label>
 
-
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
-
-                                {/* ÍCONE E-MAIL */}
+                            <div className="relative">
 
                                 <svg
-                                    className="
-                                        pointer-events-none
-                                        absolute
-                                        left-4
-                                        top-1/2
-                                        h-5
-                                        w-5
-                                        -translate-y-1/2
-                                        text-gray-300
-                                    "
+                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="1.8"
+                                    className={classeIcone}
                                 >
-
                                     <rect
                                         x="3"
                                         y="5"
@@ -542,13 +444,8 @@ function Cadastro() {
                                         height="14"
                                         rx="2"
                                     />
-
-                                    <path
-                                        d="m3 7 9 6 9-6"
-                                    />
-
+                                    <path d="m3 7 9 6 9-6" />
                                 </svg>
-
 
                                 <input
                                     type="email"
@@ -559,26 +456,11 @@ function Cadastro() {
                                     }
                                     placeholder="seu@email.com"
                                     autoComplete="email"
-                                    className="
-                                        h-11
-                                        w-full
-                                        rounded-xl
-                                        border
-                                        border-white/30
-                                        bg-white/10
-                                        pl-11
-                                        pr-4
-                                        text-sm
-                                        text-white
-                                        outline-none
-                                        transition
-                                        placeholder:text-gray-400
-                                        hover:border-white/50
-                                        focus:border-cyan-400
-                                        focus:bg-white/15
-                                        focus:ring-2
-                                        focus:ring-cyan-500/20
-                                    "
+                                    required
+                                    className={classeInput}
+                                    style={{
+                                        paddingLeft: "2.75rem"
+                                    }}
                                 />
 
                             </div>
@@ -590,11 +472,7 @@ function Cadastro() {
                             SENHA
                         ================================= */}
 
-                        <div
-                            className="
-                                mb-4
-                            "
-                        >
+                        <div className="mb-5">
 
                             <label
                                 htmlFor="senha"
@@ -609,32 +487,16 @@ function Cadastro() {
                                 Senha
                             </label>
 
-
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
-
-                                {/* ÍCONE CADEADO */}
+                            <div className="relative">
 
                                 <svg
-                                    className="
-                                        pointer-events-none
-                                        absolute
-                                        left-4
-                                        top-1/2
-                                        h-5
-                                        w-5
-                                        -translate-y-1/2
-                                        text-gray-300
-                                    "
+                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="1.8"
+                                    className={classeIcone}
                                 >
-
                                     <rect
                                         x="5"
                                         y="10"
@@ -642,13 +504,8 @@ function Cadastro() {
                                         height="10"
                                         rx="2"
                                     />
-
-                                    <path
-                                        d="M8 10V7a4 4 0 0 1 8 0v3"
-                                    />
-
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
                                 </svg>
-
 
                                 <input
                                     type="password"
@@ -659,26 +516,12 @@ function Cadastro() {
                                     }
                                     placeholder="Mínimo de 6 caracteres"
                                     autoComplete="new-password"
-                                    className="
-                                        h-11
-                                        w-full
-                                        rounded-xl
-                                        border
-                                        border-white/30
-                                        bg-white/10
-                                        pl-11
-                                        pr-4
-                                        text-sm
-                                        text-white
-                                        outline-none
-                                        transition
-                                        placeholder:text-gray-400
-                                        hover:border-white/50
-                                        focus:border-cyan-400
-                                        focus:bg-white/15
-                                        focus:ring-2
-                                        focus:ring-cyan-500/20
-                                    "
+                                    minLength={6}
+                                    required
+                                    className={classeInput}
+                                    style={{
+                                        paddingLeft: "2.75rem"
+                                    }}
                                 />
 
                             </div>
@@ -690,11 +533,7 @@ function Cadastro() {
                             CONFIRMAR SENHA
                         ================================= */}
 
-                        <div
-                            className="
-                                mb-6
-                            "
-                        >
+                        <div className="mb-6">
 
                             <label
                                 htmlFor="confirmarSenha"
@@ -709,32 +548,16 @@ function Cadastro() {
                                 Confirmar senha
                             </label>
 
-
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
-
-                                {/* ÍCONE CADEADO */}
+                            <div className="relative">
 
                                 <svg
-                                    className="
-                                        pointer-events-none
-                                        absolute
-                                        left-4
-                                        top-1/2
-                                        h-5
-                                        w-5
-                                        -translate-y-1/2
-                                        text-gray-300
-                                    "
+                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="1.8"
+                                    className={classeIcone}
                                 >
-
                                     <rect
                                         x="5"
                                         y="10"
@@ -742,13 +565,8 @@ function Cadastro() {
                                         height="10"
                                         rx="2"
                                     />
-
-                                    <path
-                                        d="M8 10V7a4 4 0 0 1 8 0v3"
-                                    />
-
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
                                 </svg>
-
 
                                 <input
                                     type="password"
@@ -761,26 +579,11 @@ function Cadastro() {
                                     }
                                     placeholder="Digite a senha novamente"
                                     autoComplete="new-password"
-                                    className="
-                                        h-11
-                                        w-full
-                                        rounded-xl
-                                        border
-                                        border-white/30
-                                        bg-white/10
-                                        pl-11
-                                        pr-4
-                                        text-sm
-                                        text-white
-                                        outline-none
-                                        transition
-                                        placeholder:text-gray-400
-                                        hover:border-white/50
-                                        focus:border-cyan-400
-                                        focus:bg-white/15
-                                        focus:ring-2
-                                        focus:ring-cyan-500/20
-                                    "
+                                    required
+                                    className={classeInput}
+                                    style={{
+                                        paddingLeft: "2.75rem"
+                                    }}
                                 />
 
                             </div>
@@ -789,15 +592,18 @@ function Cadastro() {
 
 
                         {/* =================================
-                            BOTÃO
+                            BOTÃO CADASTRAR
                         ================================= */}
 
                         <button
                             type="submit"
                             disabled={carregando}
                             className="
+                                flex
                                 h-11
                                 w-full
+                                items-center
+                                justify-center
                                 rounded-xl
                                 bg-cyan-500
                                 px-5
@@ -814,64 +620,30 @@ function Cadastro() {
                                 disabled:opacity-60
                             "
                         >
-
                             {carregando
                                 ? "Criando conta..."
                                 : "Criar conta"
                             }
-
                         </button>
 
 
                         {/* =================================
-                            LOGIN
+                            VOLTAR PARA LOGIN
                         ================================= */}
 
-                        <div
-                            className="
-                                mt-6
-                            "
-                        >
+                        <div className="mt-6">
 
-                            <div
-                                className="
-                                    mb-4
-                                    flex
-                                    items-center
-                                    gap-3
-                                "
-                            >
+                            <div className="mb-4 flex items-center gap-3">
 
-                                <div
-                                    className="
-                                        h-px
-                                        flex-1
-                                        bg-white/15
-                                    "
-                                />
+                                <div className="h-px flex-1 bg-white/15" />
 
-
-                                <span
-                                    className="
-                                        whitespace-nowrap
-                                        text-[11px]
-                                        text-gray-300
-                                    "
-                                >
+                                <span className="whitespace-nowrap text-[11px] text-gray-300">
                                     Já possui uma conta?
                                 </span>
 
-
-                                <div
-                                    className="
-                                        h-px
-                                        flex-1
-                                        bg-white/15
-                                    "
-                                />
+                                <div className="h-px flex-1 bg-white/15" />
 
                             </div>
-
 
                             <Link
                                 to="/login"
@@ -907,8 +679,6 @@ function Cadastro() {
         </main>
 
     );
-
 }
-
 
 export default Cadastro;
