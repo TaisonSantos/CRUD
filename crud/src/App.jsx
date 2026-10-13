@@ -34,6 +34,8 @@ import ProtectedRoute
     from "./assets/componentes/ProtectedRoute";
 
 
+import Perfil from "./assets/componentes/Perfil";
+
 function App() {
 
     return (
@@ -60,6 +62,8 @@ function App() {
                 <Route
                     element={<ProtectedRoute />}
                 >
+      
+                    <Route path="perfil" element={<Perfil />} />
 
                     <Route
                         path="/"

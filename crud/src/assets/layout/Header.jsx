@@ -133,9 +133,15 @@ function Header() {
 
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-700">
 
-                    <span className="material-symbols-outlined text-2xl text-gray-200">
-                        person
+                <Link
+                    to="/perfil"
+                    title="Meu perfil"
+                    className="flex items-center justify-center rounded-lg p-2 text-gray-600 transition hover:bg-cyan-50 hover:text-cyan-700"
+                    >
+                    <span className="material-symbols-outlined">
+                        account_circle
                     </span>
+                 </Link>
 
                 </div>
 

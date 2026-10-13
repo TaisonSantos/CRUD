@@ -93,3 +93,19 @@ export async function fazerLogout() {
     return true;
 
 }
+
+
+export async function atualizarPerfil(nome) {
+    const { data, error } = await supabase.auth.updateUser({
+      data: {
+        nome: nome.trim()
+      }
+    });
+  
+    if (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      return { sucesso: false, erro: error.message };
+    }
+  
+    return { sucesso: true, data };
+  }
