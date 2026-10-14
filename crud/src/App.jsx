@@ -63,7 +63,7 @@ function App() {
                     element={<ProtectedRoute />}
                 >
       
-                    <Route path="perfil" element={<Perfil />} />
+                    
 
                     <Route
                         path="/"
@@ -84,6 +84,10 @@ function App() {
                             path="cadastro-produto"
                             element={<FormCadastroProd />}
                         />
+
+                        <Route 
+                            path="perfil" 
+                            element={<Perfil />} />
 
                     </Route>
 

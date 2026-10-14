@@ -1,25 +1,22 @@
+
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Nav from "./Nav";
 
-function Layout() {
-    return (
-        <div className="min-h-screen bg-gray-100">
+function Loyalt() {
+  return (
+    <div className="flex min-h-screen flex-col bg-gray-100">
+      <Header />
 
-            <Header />
+      <div className="flex flex-1 min-h-0">
+        <Nav />
 
-            <div className="flex min-h-[calc(100vh-64px)]">
-
-                <Nav />
-
-                <main className="flex-1 overflow-auto p-6">
-                    <Outlet />
-                </main>
-
-            </div>
-
-        </div>
-    );
+        <main className="min-w-0 flex-1 p-4 md:p-6">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
 }
 
-export default Layout;
+export default Loyalt;
